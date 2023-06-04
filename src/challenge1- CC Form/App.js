@@ -67,6 +67,7 @@ export default function App() {
           <input
             id="cardName"
             type="text"
+            placeholder="only letters allowed"
             required={true}
             value={cardName}
             onChange={(e) => {
@@ -86,6 +87,7 @@ export default function App() {
           <input
             id="cardExpiryMonth"
             type="text"
+            placeholder="Expiry Month"
             required={true}
             value={cardMon}
             onChange={(e) => {
@@ -104,6 +106,7 @@ export default function App() {
             id="cardExpiryYear"
             type="text"
             value={cardYear}
+            placeholder="Expiry Year"
             required={true}
             onChange={(e) => {
               if (year2.filter((a) => a === e.target.value).length === 1) {
@@ -121,6 +124,7 @@ export default function App() {
             id="cardCvv"
             type="text"
             required={true}
+            placeholder="CVV"
             value={cardCvv}
             onChange={(e) => {
               if (!isNaN(e.target.value) && e.target.value.length <= 4) {
