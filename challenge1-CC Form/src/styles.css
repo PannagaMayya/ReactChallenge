@@ -1,0 +1,44 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+.container {
+  background-color: burlywood;
+  border: 1px solid black;
+  width: 60%;
+  margin: auto;
+  color: white;
+}
+form {
+  margin: auto;
+  width: 80%;
+}
+form div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 5px;
+}
+
+form div input {
+  width: 50%;
+  padding: 10px;
+  letter-spacing: 0.6ch;
+}
+#inp-sub {
+  width: 50%;
+  padding: 10px;
+  margin: 5px;
+  background-color: aquamarine;
+  cursor: pointer;
+}
+#inp-sub:hover {
+  background-color: rgb(80, 239, 191);
+}
+#inp-sub:disabled {
+  background-color: rgb(211, 237, 229);
+}
+
+.error-input {
+  color: red;
+}
