@@ -3,9 +3,28 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 import HomePage from "./pages/HomePage";
-
+import ProfilePage from "./pages/ProfilePage";
+import ComingSoon from "./pages/ComingSoon";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 function App() {
-  return <HomePage />;
-}
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/profile" element={<ProfilePage />}></Route>
 
+        <Route path="/posts" element={<ComingSoon pageName="Posts" />}></Route>
+
+        <Route
+          path="/gallery"
+          element={<ComingSoon pageName="Gallery" />}
+        ></Route>
+
+        <Route path="/todo" element={<ComingSoon pageName="ToDo" />}></Route>
+
+        <Route path="/" element={<HomePage />}></Route>
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
 export default App;
