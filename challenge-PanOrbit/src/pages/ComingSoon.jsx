@@ -10,7 +10,7 @@ function ComingSoon({ pageName }) {
       <NavBar pageName={pageName} pageState={curPageState.state} />
       <div className="flex basis-4/5 mx-7 p-2 flex-col ">
         <PageHeading pageName={pageName} userState={curPageState.state} />
-        <div className="flex mt-2 h-full justify-center items-center">
+        <div className="flex mb-10 h-full justify-center items-center">
           <h1 className="text-6xl text-slate-200 font-bold">Coming Soon</h1>
         </div>
       </div>

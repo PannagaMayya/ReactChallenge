@@ -1,12 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MiniChatBox from "./MiniChatBox";
 import { useLocation } from "react-router-dom";
 const getMessages = (from, to) => {
-  let temp = [];
-  temp[0] =
+  let temp =
     JSON.parse(sessionStorage.getItem("from-" + from + "to-" + to)) || [];
-  temp[1] =
-    JSON.parse(sessionStorage.getItem("to-" + from + "from-" + to)) || [];
   return temp;
 };
 
@@ -16,15 +13,15 @@ function ChatBox() {
   const [chatOpen, setChatOpen] = useState(false);
   const [toUser, setToUser] = useState(null);
   const putMessages = (id, message) => {
-    console.log(pageState.state.currentUser);
     let temp = getMessages(pageState.state.currentUser.id, id);
     sessionStorage.setItem(
       "from-" + pageState.state.currentUser.id + "to-" + id,
-      JSON.stringify([...temp[0], { message: message }])
+      JSON.stringify([...temp, { message: message, from: true }])
     );
+    temp = getMessages(id, pageState.state.currentUser.id);
     sessionStorage.setItem(
-      "to-" + pageState.state.currentUser.id + "from-" + id,
-      JSON.stringify([...temp[1], { message: message }])
+      "from-" + id + "to-" + pageState.state.currentUser.id,
+      JSON.stringify([...temp, { message: message, from: false }])
     );
   };
   const controlChatbox = (user, toOpen) => {
@@ -81,7 +78,7 @@ function ChatBox() {
         </span>
       </div>
       {open && (
-        <div className="h-48 overflow-y-scroll">
+        <div className="h-60 overflow-y-scroll">
           {pageState.state.otherUsers.map((e, i) => (
             <div
               key={e.id}
@@ -94,7 +91,18 @@ function ChatBox() {
               }}
             >
               <img src={e.profilepicture} className="w-7 rounded-3xl" />
-              <span className="text-xs font-thin mx-2">{e.name}</span>
+              <p className="flex justify-between items-center w-full tracking-wide text-xs font-thin mx-2">
+                <span>{e.name}</span>
+                <span
+                  className={
+                    Math.random() * 2 < 1
+                      ? "text-green-500 text-lg"
+                      : "text-gray-500 text-lg"
+                  }
+                >
+                  •
+                </span>
+              </p>
             </div>
           ))}
         </div>
@@ -104,7 +112,8 @@ function ChatBox() {
           toUser={toUser}
           controlChatbox={controlChatbox}
           putMessages={putMessages}
-          newMessages={getMessages(pageState.state.currentUser.id, toUser.id)}
+          getMessages={getMessages}
+          curUserId={pageState.state.currentUser.id}
         />
       )}
     </div>

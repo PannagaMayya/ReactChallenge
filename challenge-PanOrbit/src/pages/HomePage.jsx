@@ -20,7 +20,7 @@ function HomePage() {
     <>
       <div className="bg-gradient-to-r from-violet-600 to-indigo-600 curvy">
         <div className="overflow-y-scroll absolute bg-white rounded-xl p-10 w-4/12 h-4/5 top-20 inset-x-1/3 shadow-2xl z-10">
-          <h1 className="text-lg text-center tracking-wide font-medium">
+          <h1 className="text-base text-center tracking-wide text-gray-600 font-semibold">
             Select an account
           </h1>
 
@@ -42,7 +42,9 @@ function HomePage() {
                   }}
                 >
                   <img src={e.profilepicture} className="w-7 rounded-3xl" />
-                  <span className="text-sm font-thin ml-2">{e.name}</span>
+                  <span className="text-sm text-gray-600 font-medium ml-2">
+                    {e.name}
+                  </span>
                 </div>
               ))
             )}

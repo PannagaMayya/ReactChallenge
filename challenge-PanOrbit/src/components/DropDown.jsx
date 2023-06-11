@@ -9,10 +9,10 @@ function DropDown({ userState }) {
           src={userState.currentUser.profilepicture}
           className="w-20 rounded-full"
         />
-        <span className="text-md font-thin mt-1">
+        <span className="text-gray-600 tracking-wide text-sm font-thin mt-1">
           {userState.currentUser.name}
         </span>
-        <span className="text-md font-thin m-1">
+        <span className="text-gray-400 text-xs tracking-wide font-thin m-1">
           {userState.currentUser.email}
         </span>
       </div>
@@ -34,15 +34,15 @@ function DropDown({ userState }) {
         >
           <img
             src={userState.otherUsers[i].profilepicture}
-            className="w-7 rounded-3xl"
+            className="w-6 rounded-3xl"
           />
-          <span className="text-sm font-thin ml-2">
+          <span className="tracking-wide text-xs font-thin ml-2">
             {userState.otherUsers[i].name}
           </span>
         </div>
       ))}
       <button
-        className="rounded-full py-1 px-3 my-2 bg-red-600 text-white font-medium"
+        className="rounded-full py-1 px-3 my-2 bg-red-600 text-white text-sm font-medium"
         onClick={(ev) => {
           navigate("/");
         }}
