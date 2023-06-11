@@ -1,25 +1,22 @@
 import React from "react";
-import NavBar from "../NavBar";
-import PageHeading from "../PageHeading";
+import NavBar from "../components/NavBar";
+import PageHeading from "../components/PageHeading";
+import { useLocation, Navigate } from "react-router-dom";
 function ComingSoon({ pageName }) {
-  return (
+  let curPageState = useLocation();
+
+  return curPageState.state ? (
     <div className="flex m-10 h-screen">
-      <NavBar pageName={pageName} />
-      <div className="flex basis-3/4 mx-10 p-2 flex-col ">
-        <PageHeading
-          pageName={pageName}
-          userState={{
-            name: "Leanne Graham",
-            email: "Sincere@april.biz",
-            profilepicture: "https://panorbit.in/wp-c…019/hotlink-ok/1001.jpeg",
-            otherUsers: [],
-          }}
-        />
+      <NavBar pageName={pageName} pageState={curPageState.state} />
+      <div className="flex basis-4/5 mx-7 p-2 flex-col ">
+        <PageHeading pageName={pageName} userState={curPageState.state} />
         <div className="flex mt-2 h-full justify-center items-center">
           <h1 className="text-6xl text-slate-200 font-bold">Coming Soon</h1>
         </div>
       </div>
     </div>
+  ) : (
+    <Navigate to="/" replace />
   );
 }
 
