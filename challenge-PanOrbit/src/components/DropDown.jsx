@@ -16,6 +16,7 @@ function DropDown({ userState }) {
           {userState.currentUser.email}
         </span>
       </div>
+      {/* Other Users login */}
       {[0, 1].map((e, i) => (
         <div
           key={userState.otherUsers[i].id}

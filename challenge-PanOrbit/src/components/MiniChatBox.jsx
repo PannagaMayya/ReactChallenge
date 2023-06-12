@@ -22,7 +22,7 @@ function MiniChatBox({
       { message: "Lorem ipsum.", from: true },
       ...getMessages(curUserId, toUser.id),
     ]);
-  }, [toUser]);
+  }, [toUser, curUserId]);
 
   return (
     <div className="absolute top-1/4 right-full w-full flex flex-col bg-white border border-blue-200 rounded-xl mr-10">
@@ -68,6 +68,7 @@ function MiniChatBox({
           </svg>
         </span>
       </div>
+      {/* Chats Body */}
       {toUser && (
         <div className="flex flex-col h-40 ">
           <div className="flex flex-col-reverse px-2 overflow-y-scroll">

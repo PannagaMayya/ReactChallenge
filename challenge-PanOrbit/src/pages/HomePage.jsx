@@ -1,6 +1,5 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import "./HomePage.css";
 import { useNavigate } from "react-router-dom";
 
 function HomePage() {
@@ -18,12 +17,13 @@ function HomePage() {
   }, []);
   return (
     <>
-      <div className="bg-gradient-to-r from-violet-600 to-indigo-600 curvy">
+      <div className="bg-gradient-to-r from-violet-600 to-indigo-600 h-[70vh]">
+        {/* Account Details */}
         <div className="overflow-y-scroll absolute bg-white rounded-xl p-10 w-4/12 h-4/5 top-20 inset-x-1/3 shadow-2xl z-10">
           <h1 className="text-base text-center tracking-wide text-gray-600 font-semibold">
             Select an account
           </h1>
-
+          {/* Account List */}
           <div className="mt-6">
             {users.length < 1 ? (
               <div className="text-center text-xl mt-16">Loading...</div>
@@ -56,7 +56,7 @@ function HomePage() {
         viewBox="0 0 1440 320"
         style={{
           position: "relative",
-          top: "-251px",
+          top: "-240px",
         }}
       >
         <path

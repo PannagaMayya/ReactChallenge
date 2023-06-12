@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import MiniChatBox from "./MiniChatBox";
 import { useLocation } from "react-router-dom";
+
 const getMessages = (from, to) => {
   let temp =
     JSON.parse(sessionStorage.getItem("from-" + from + "to-" + to)) || [];
@@ -9,9 +10,13 @@ const getMessages = (from, to) => {
 
 function ChatBox() {
   let pageState = useLocation();
+  let r = useRef();
   const [open, setOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
   const [toUser, setToUser] = useState(null);
+  {
+    /* Send message function */
+  }
   const putMessages = (id, message) => {
     let temp = getMessages(pageState.state.currentUser.id, id);
     sessionStorage.setItem(
@@ -28,7 +33,18 @@ function ChatBox() {
     setToUser(user);
     setChatOpen(toOpen);
   };
-
+  useEffect(() => {
+    const checkClick = (e) => {
+      if ((open || chatOpen) && r.current && !r.current.contains(e.target)) {
+        setChatOpen(false);
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", checkClick);
+    return () => {
+      document.removeEventListener("mousedown", checkClick);
+    };
+  }, [open, chatOpen]);
   return (
     <div
       className={
@@ -36,6 +52,7 @@ function ChatBox() {
           ? "flex flex-col w-1/5 absolute top-full left-3/4 bg-white border border-blue-200 rounded-xl mt-20 cursor-pointer -translate-y-3/4"
           : "flex flex-col w-1/5 absolute top-full left-3/4 bg-white border border-blue-200 rounded-xl mt-20 cursor-pointer"
       }
+      ref={r}
     >
       <div
         className="flex items-center justify-between bg-blue-500 text-white p-3 rounded-t-xl"
@@ -77,6 +94,7 @@ function ChatBox() {
           </svg>
         </span>
       </div>
+      {/* Chatbox Body */}
       {open && (
         <div className="h-60 overflow-y-scroll">
           {pageState.state.otherUsers.map((e, i) => (

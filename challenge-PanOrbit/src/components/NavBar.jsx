@@ -8,13 +8,18 @@ function NavBar({ pageName, pageState }) {
       {["Profile", "Posts", "Gallery", "ToDo"].map((e, i) => (
         <div
           key={e}
-          className="w-8/12 py-3 text-left text-slate-400 font-medium cursor-pointer border-b border-slate-200"
+          className="flex justify-between w-8/12 py-3 text-left text-slate-400 font-medium cursor-pointer border-b border-slate-200"
           style={pageName == e ? { color: "white" } : {}}
           onClick={(ev) => {
             navigate("/" + e.toLowerCase(), { state: pageState });
           }}
         >
           {e}
+          {pageName == e && (
+            <span className="relative bg-white text-gray-400 px-2 -mr-12 rounded-l-2xl">
+              {" > "}
+            </span>
+          )}
         </div>
       ))}
     </div>

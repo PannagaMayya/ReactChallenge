@@ -12,7 +12,9 @@ function ProfilePage() {
       <NavBar pageName={"Profile"} pageState={pageState.state} />
       <div className="flex basis-4/5 mx-7 p-2 flex-col ">
         <PageHeading pageName={"Profile"} userState={pageState.state} />
+        {/* Profile Page Body */}
         <div className="flex mt-2">
+          {/* Profile Page Personal and Company Details */}
           <div className="flex flex-col justify-center items-center basis-2/4 py-4 border-r border-slate-200">
             <img
               src={pageState.state.currentUser.profilepicture}
@@ -56,6 +58,7 @@ function ProfilePage() {
               </p>
             ))}
           </div>
+          {/* Profile Address Details */}
           <div className="flex flex-col basis-3/4 p-4 ml-6">
             <h2 className="mb-3 text-gray-400	font-normal">Address : </h2>
             {["Street", "Suite", "City", "Zipcode"].map((address) => (
