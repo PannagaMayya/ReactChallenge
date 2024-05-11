@@ -7,11 +7,13 @@ import (
 	"github.com/google/uuid"
 )
 
-
+type JobReq struct {
+	Name     string        `json:"name"`
+	Duration time.Duration `json:"duration"`
+}
 
 type Job struct {
-	Id 		 uuid.UUID 	 				`json:"id"`	
-	Name     string 	 				`json:"name"`
-	Duration time.Duration  			`json:"duration"`
-	Status 	 constants.JobStatus     	`json:"status"`
+	Id     uuid.UUID           `json:"id"`
+	Status constants.JobStatus `json:"status"`
+	JobReq
 }

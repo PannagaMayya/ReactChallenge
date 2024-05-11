@@ -11,21 +11,22 @@ import (
 
 func main() {
 	log.Println("Initilizing server....")
-	e:=echo.New()
+	e := echo.New()
 
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
-		AllowMethods: []string{echo.GET,echo.POST,echo.PUT},
+		AllowMethods: []string{echo.GET, echo.POST, echo.PUT},
 	}))
 
-	e.GET("/job-service/health-check",func(c echo.Context) error{
-		return c.JSON(200,map[string]interface{}{
-		"data":"success"})
+	e.GET("/job-service/health-check", func(c echo.Context) error {
+		return c.JSON(200, map[string]interface{}{
+			"data": "success"})
 	})
 
-	v1:=e.Group("/job-service/api/v1")
+	v1 := e.Group("/job-service/api/v1")
 
 	routes.Initialize(v1)
 
 	e.Logger.Fatal(e.Start("0.0.0.0:8080"))
+
 }
