@@ -37,6 +37,8 @@ func (j JobService) CreateJob(req models.JobReq) (models.Job, error) {
 	RepoData = append(RepoData, dbModel)
 	toDos = append(toDos, len(RepoData)-1)
 
+	go StartNextJob()
+
 	return dbModel, nil
 }
 
@@ -44,25 +46,6 @@ func (j JobService) HandleWebsocket(conn *websocket.Conn) {
 	//defer conn.Close()
 
 	socketConn = conn
-	var dbModel models.Job
-	dbModel.Id = uuid.New()
-	dbModel.Name = "Job1"
-	dbModel.Duration = time.Second * 10
-	dbModel.Status = constants.Pending
-
-	RepoData = append(RepoData, dbModel)
-	toDos = append(toDos, len(RepoData)-1)
-	dbModel.Name = "Job2"
-	dbModel.Duration = time.Second * 5
-	RepoData = append(RepoData, dbModel)
-	toDos = append(toDos, len(RepoData)-1)
-	for {
-		if isJobRunning {
-			continue
-		}
-		StartNextJob()
-
-	}
 }
 
 func WriteMessageInWebSocket(job models.Job) {
@@ -77,7 +60,10 @@ func WriteMessageInWebSocket(job models.Job) {
 }
 
 func StartNextJob() {
-	if len(toDos) > 0 {
+	for len(toDos) > 0 {
+		if isJobRunning {
+			continue
+		}
 		isJobRunning = true
 		minDur := toDos[0]
 		ind := 0
@@ -94,9 +80,7 @@ func StartNextJob() {
 		WriteMessageInWebSocket(RepoData[minDur])
 		toDos = append(toDos[:ind], toDos[ind+1:]...)
 		isJobRunning = false
-
-	} else {
-		log.Println("no jobs pending")
 	}
+	log.Println("All jobs done")
 
 }
