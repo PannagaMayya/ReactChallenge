@@ -7,27 +7,47 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { Alert } from "@mui/material";
+import { Alert, LinearProgress } from "@mui/material";
 import "./Job.css";
 const columns = [
   { id: "name", label: "Name", minWidth: 170 },
-  { id: "duration", label: "Duration(in seconds)", minWidth: 100 },
+  { id: "duration", label: "Duration (in seconds)", minWidth: 100 },
   { id: "status", label: "Status", minWidth: 100 },
 ];
+const statusTypes = {
+  pending: {
+    severity: "info",
+    style: { backgroundColor: "#fffaf0" },
+  },
+  complete: {
+    severity: "success",
+    style: { backgroundColor: "#f8f8ff" },
+  },
+  running: {
+    severity: "warning",
+    style: { backgroundColor: "#ffebee" },
+  },
+};
+export default function Job({ currentJob, open }) {
+  const [rows, setRows] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-export default function Job({ currentJob }) {
-  const [rows, setRows] = useState([]);
   useEffect(() => {
     axios
       .get("http://localhost:8080/job-service/api/v1/jobs")
       .then((response) => {
-        console.log(response.data.data);
         setRows(response.data.data);
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 2000);
+        currentJob &&
+          currentJob?.id &&
+          document.getElementById(currentJob?.id).scrollIntoView();
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [currentJob]);
+  }, [currentJob, open]);
   return (
     <Paper
       sx={{
@@ -35,9 +55,14 @@ export default function Job({ currentJob }) {
         overflow: "hidden",
         alignContent: "center",
         margin: "auto",
+        boxShadow: "2px 6px 12px #80cbc4",
       }}
     >
-      <TableContainer sx={{ maxHeight: 440 }}>
+      <TableContainer
+        sx={{
+          maxHeight: 440,
+        }}
+      >
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
@@ -53,24 +78,44 @@ export default function Job({ currentJob }) {
               ))}
             </TableRow>
           </TableHead>
-          {rows.length > 0 ? (
-            <TableBody>
-              {rows.map((row) => {
+
+          <TableBody style={{ cursor: "pointer" }}>
+            {isLoading ? (
+              <TableRow>
+                <TableCell colSpan={3}>
+                  <LinearProgress />
+                </TableCell>
+              </TableRow>
+            ) : rows && rows.length > 0 ? (
+              rows.map((row) => {
                 return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    tabIndex={-1}
+                    key={row.id}
+                    id={row.id}
+                    sx={statusTypes[row["status"]].style}
+                  >
                     {columns.map((column) => {
                       const value = row[column.id];
                       return (
-                        <TableCell key={column.id} align={column.align}>
+                        <TableCell
+                          key={column.id}
+                          align={column.align}
+                          sx={
+                            column.id == "name" ? { fontWeight: "600" } : null
+                          }
+                        >
                           {column.id == "status" ? (
                             <Alert
-                              severity={
-                                value == "pending"
-                                  ? "info"
-                                  : value == "running"
-                                  ? "warning"
-                                  : "success"
-                              }
+                              color={statusTypes[value].severity}
+                              sx={{
+                                border: "1px solid #536dfe",
+                                boxShadow: "2px 3px 3px #80cbc4",
+                                textTransform: "capitalize",
+                              }}
+                              severity={statusTypes[value].severity}
                             >
                               {value}
                             </Alert>
@@ -84,11 +129,22 @@ export default function Job({ currentJob }) {
                     })}
                   </TableRow>
                 );
-              })}
-            </TableBody>
-          ) : (
-            <>Loading...</>
-          )}
+              })
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={3}
+                  style={{
+                    textAlign: "center",
+                    fontWeight: "400",
+                    fontSize: "20px",
+                  }}
+                >
+                  No data
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
         </Table>
       </TableContainer>
     </Paper>

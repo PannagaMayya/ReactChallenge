@@ -25,25 +25,23 @@ function HomePage() {
       ws.close();
     };
   }, []);
+
   const [job, setJob] = useState(null);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = (job) => {
-    setJob(job);
-    setOpen(false);
-  };
+  const handleClose = () => setOpen(false);
   return (
     <>
       <Header handleOpen={handleOpen} />
       <div className="container">
         <Container maxWidth="lg">
           {" "}
-          <Job currentJob={job} />{" "}
+          <Job currentJob={job} open={open} />{" "}
         </Container>
         <JobForm handleClose={handleClose} open={open}></JobForm>
         <Snackbar
           open={openToast}
-          autoHideDuration={1000}
+          autoHideDuration={2000}
           onClose={() => {
             setOpenToast(false);
           }}

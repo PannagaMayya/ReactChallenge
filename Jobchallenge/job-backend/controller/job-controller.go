@@ -19,9 +19,10 @@ func (j JobController) GetJobs(c echo.Context) error {
 
 	resp, err := j.jobService.GetJobs()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, models.Response{err, err.Error(), http.StatusInternalServerError})
+		return utils.ErrorResponse(c, err)
 	}
-	c.JSON(http.StatusOK, models.Response{resp, "Success", http.StatusOK})
+	c.JSON(http.StatusOK,
+		models.Response{resp, "Success", http.StatusOK})
 
 	return nil
 }
@@ -47,6 +48,8 @@ func (j JobController) CreateJob(c echo.Context) error {
 func (j JobController) ConnectWebSocket(c echo.Context) error {
 	var upgrader = websocket.Upgrader{}
 	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
+
+	//Connection Upgrade
 	conn, err := upgrader.Upgrade(c.Response().Writer, c.Request(), nil)
 	if err != nil {
 		log.Print("Upgarde failed with error: ", err)

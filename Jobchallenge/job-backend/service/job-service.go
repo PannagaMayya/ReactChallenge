@@ -5,6 +5,7 @@ import (
 	"job-backend/constants"
 	"job-backend/models"
 	"log"
+	"sync"
 	"time"
 
 	"github.com/google/uuid"
@@ -14,10 +15,10 @@ import (
 type JobService struct {
 }
 
+// Below data is used instead of storing in DB
 var RepoData = []models.Job{}
 
 var toDos []int
-var doneIds []uuid.UUID
 
 var socketConn *websocket.Conn
 
@@ -37,18 +38,24 @@ func (j JobService) CreateJob(req models.JobReq) (models.Job, error) {
 	RepoData = append(RepoData, dbModel)
 	toDos = append(toDos, len(RepoData)-1)
 
-	go StartNextJob()
+	if !isJobRunning {
+		go StartNextJob()
+	}
 
 	return dbModel, nil
 }
 
 func (j JobService) HandleWebsocket(conn *websocket.Conn) {
 	//defer conn.Close()
-
 	socketConn = conn
 }
 
 func WriteMessageInWebSocket(job models.Job) {
+	//To prevent concurrent write
+	var m sync.RWMutex
+	m.Lock()
+	defer m.Unlock()
+
 	out, _ := json.Marshal(job)
 	if socketConn != nil {
 		err := socketConn.WriteMessage(1, out)
@@ -65,6 +72,7 @@ func StartNextJob() {
 			continue
 		}
 		isJobRunning = true
+		//finding minimum duration job
 		minDur := toDos[0]
 		ind := 0
 		for i, v := range toDos {

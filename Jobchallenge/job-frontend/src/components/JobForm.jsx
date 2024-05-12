@@ -38,11 +38,10 @@ export default function JobForm({ handleClose, open }) {
           component="form"
           onSubmit={(e) => {
             e.preventDefault();
-            console.log(name, duration);
-            job = SubmitJob(name, duration);
+            SubmitJob(name, duration);
+            handleClose();
             setName("");
             setDuration(1);
-            handleClose(job);
           }}
         >
           <Typography id="modal-modal-title" variant="h6" component="h2">
